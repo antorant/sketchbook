@@ -1,6 +1,7 @@
 int canvasWidth = 960;
 int canvasHeight = 540;
 
+//
 boolean isRecording = false;
 
 void settings(){
@@ -19,11 +20,11 @@ void setup(){
 void sketchShape(int[][] points, int density){
   println(points.length);
   
-  // create the polygon
+  // create the polygon object (p)
   java.awt.Polygon p = new java.awt.Polygon();
   
+  // add each point to the polygon object
   for (int i = 0; i < points.length; i++) {
-    println(points[i][0], points[i][1]);
     p.addPoint(points[i][0], points[i][1]);
   }
 
@@ -41,20 +42,20 @@ void sketchShape(int[][] points, int density){
   endShape();
   // === debug: draw the polygon outline */
   
-  // get polygon center point, width, height
-  // first sum all X coordinates, all Y coordinates
-  // vars
+
+  /*/ === debug: get polygon center point
   int xTotal = 0;
   int yTotal = 0;
   
+  // first sum up all X coordinates, all Y coordinates
   for (int i = 0; i < p.npoints; i++) {   
     xTotal += p.xpoints[i];
     yTotal += p.ypoints[i];
   }
   
-  // get the average of each (= center point of shape)
   int polygonCenterX = xTotal / p.npoints;
   int polygonCenterY = yTotal / p.npoints;
+  // === end debug: get polygon center point */
   
   
   // vars: range variables to calculate bounding box
@@ -115,6 +116,8 @@ void sketchShape(int[][] points, int density){
     int y1 = randomInteger(yLow, yHigh); 
     int x2 = randomInteger(xLow, xHigh);
     int y2 = randomInteger(yLow, yHigh);
+    
+    // check they're inside then draw line; if not reject and retry
     if (p.contains(x1, y1) == true && p.contains(x2, y2) == true){
       line(x1, y1, x2, y2);
     } else {
@@ -161,17 +164,17 @@ void draw(){
 void keyPressed() {
   //println(keyCode);
   
-  // space bar : redraw
+  // [space] : redraw
   if (keyCode == 32) {
     redraw();
   }
   
-  // p : export image
+  // P : export image
   if (keyCode == 80) {    
     saveFrame(getTimestamp()+".png");
   }
   
-  // q : record (output images)
+  // Q : record (output images)
   if (keyCode == 81) {    
     toggleIsRecording();
   }
