@@ -31,7 +31,7 @@ void setup(){
   fill(#cccccc);
 }
 
-void sketchShape(int[][] points, int density){
+void sketchShape(int[][] points, int density, String orientation, int size){
   
   // create the polygon object (p)
   java.awt.Polygon p = new java.awt.Polygon();
@@ -132,14 +132,23 @@ void sketchShape(int[][] points, int density){
   int count = density;
   for (int i = 0; i < count; i++) {
     // create a random x,y pair inside the bounding box
+   
     int x1 = randomInteger(xLow, xHigh);
-    int y1 = randomInteger(yLow, yHigh); 
-    int x2 = randomInteger(xLow, xHigh);
-    int y2 = randomInteger(yLow, yHigh);
+    int y1 = randomInteger(yLow, yHigh);
+    
+    int x2, y2;
+    
+    // random length
+    //x2 = randomInteger(xLow, xHigh);
+    //y2 = randomInteger(yLow, yHigh);
+    
+    // limited length
+    x2 = randomInteger(x1 - size, x1 + size);
+    y2 = randomInteger(y1 - size, y1 + size);
     
     // polarise!
-    ///y2 = y1; // horizontal
-    x2 = x1; // vertical
+    if (orientation == "horizontal") { y2 = y1; }
+    if (orientation == "vertical") { x2 = x1; }
     
     // check they're inside then draw line; if not reject and retry
     if (p.contains(x1, y1) == true && p.contains(x2, y2) == true){
@@ -186,13 +195,13 @@ void drawScene(){
   
   // cliffs
   int[][] rocks = { {960,577}, {925,592}, {900,577}, {872,597}, {863,616}, {842,617}, {838,632}, {798,646}, {779,670}, {723,694}, {656,743}, {649,776}, {593,767}, {562,774}, {523,782}, {378,819}, {311,804}, {274,802}, {189,831}, {167,823}, {136,838}, {63,838}, {50,849}, {26,851}, {0,880}, {0,960}, {960,960}, {960,577} }; 
-  sketchShape(rocks, 500);
+  sketchShape(rocks, 800, "vertical", 960);
   
   int[][] sea = { {875,595}, {872,597}, {863,616}, {842,617}, {838,632}, {798,646}, {779,670}, {723,694}, {656,743}, {649,776}, {593,767}, {562,774}, {523,782}, {378,819}, {311,804}, {274,802}, {189,831}, {167,823}, {136,838}, {63,838}, {50,849}, {26,851}, {0,880}, {0,960}, {0,595}, {875,595} }; 
-  sketchShape(sea, 300);
+  sketchShape(sea, 300, "horizontal", 960);
   
   int[][] sky = { {0,595}, {875,595}, {903,577}, {925,595}, {960,577}, {960,0}, {480,0}, {553,30}, {537,51}, {551,82}, {502,102}, {554,123}, {542,164}, {574,193}, {500,255}, {512,284}, {541,298}, {531,353}, {362,435}, {296,451}, {365,402}, {335,374}, {437,337}, {367,322}, {403,307}, {337,282}, {364,261}, {247,210}, {287,185}, {217,153}, {288,128}, {207,123}, {233,96}, {177,80}, {133,0}, {0,0}, {0,595} }; 
-  sketchShape(sky, 100);
+  sketchShape(sky, 80, "none", 100);
   // === */
 
 }
