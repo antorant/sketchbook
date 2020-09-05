@@ -4,6 +4,8 @@ int canvasHeight = 540;
 //
 boolean isRecording = false;
 
+String scene = "sketchbook_theme";
+
 void settings(){
   size(canvasWidth, canvasHeight);
 }
@@ -159,6 +161,13 @@ void draw(){
     saveFrame(getTimestamp()+".png");
   }
 }
+
+int [][][] sketchbook_theme = {
+  { {0,400}, {960, 400}, {960, 440}, {0, 440} }, // wall
+  { {0,440}, {960, 440}, {960, 540}, {0, 540} }, // floor
+  { {520,320}, {650, 260}, {780, 310}, {720, 960}, {620, 960} }, // body 
+  { {580,160}, {720, 140}, {680, 320}, {600, 300} } // head
+};
 
 // handle key press events
 void keyPressed() {
