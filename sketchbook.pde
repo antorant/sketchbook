@@ -3,6 +3,10 @@ int canvasHeight = 540;
 
 //
 boolean isRecording = false;
+String canvasTheme = "dark"; // light, dark
+
+color canvasFG;
+color canvasBG;
 
 void settings(){
   size(canvasWidth, canvasHeight);
@@ -12,13 +16,22 @@ void setup(){
   //noLoop();
   frameRate(1);
   
-  stroke(#000000);
-  background(#ffffff);
+  if (canvasTheme == "light") {
+    canvasFG = #000000;
+    canvasBG = #ffffff;
+  }
+  
+  if (canvasTheme == "dark") {
+    canvasFG = #ffffff;
+    canvasBG = #000000;
+  }
+  
+  stroke(canvasFG);
+  background(canvasBG);
   fill(#cccccc);
 }
 
 void sketchShape(int[][] points, int density){
-  println(points.length);
   
   // create the polygon object (p)
   java.awt.Polygon p = new java.awt.Polygon();
@@ -107,7 +120,7 @@ void sketchShape(int[][] points, int density){
   //endShape();
   
   
-  stroke(#ffffff);
+  stroke(canvasFG);
   // draw a series of lines inside the shape
   int count = density;
   for (int i = 0; i < count; i++) {
@@ -163,9 +176,8 @@ void drawScene(){
 }
 
 void draw(){
-  background(#000000);
-  stroke(#ffffff);
-  println("---");
+  background(canvasBG);
+  stroke(canvasFG);
   
   drawScene();
   
