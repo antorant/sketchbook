@@ -126,20 +126,9 @@ void sketchShape(int[][] points, int density){
   }
 }
 
-void draw(){
-  background(#000000);
-  stroke(#ffffff);
-  println("---");
+void drawScene(){
   
-  //int[][] star1 = { {200,100}, {210, 90}, {220, 110} }; 
-  //sketchShape(star1, 1);
-  
-  //int[][] star2 = { {400,150}, {410, 140}, {420, 160} }; 
-  //sketchShape(star2, 1);
-  
-  //int[][] star3 = { {160,210}, {170, 200}, {180, 210} }; 
-  //sketchShape(star3, 1);
-  
+  /*/ skethbook theme
   int[][] mountain = { {0,0}, {960, 0}, {960, 400}, {0, 400} }; 
   sketchShape(mountain, 1);
 
@@ -154,6 +143,31 @@ void draw(){
   
   int[][] headShape = { {580,160}, {720, 140}, {680, 320}, {600, 300} }; 
   sketchShape(headShape, 20);
+  // === */
+  
+  
+  // mountains theme
+  int[][] partD = { {0,150}, {72,152}, {126,149}, {207,176}, {260,161}, {293,176}, {329,149}, {402,168}, {439,149}, {519,167}, {568,185}, {501,185}, {327,256}, {288,305}, {260,387}, {210,363}, {189,218}, {0,185}, {0,150} }; 
+  sketchShape(partD, 50);
+  
+  int[][] partC = { {960,149}, {960,287}, {606,540}, {519,540}, {259,388}, {287,303}, {325,256}, {501,185}, {589,185}, {639,207}, {743,159}, {844,156}, {960,149} }; 
+  sketchShape(partC, 100);
+  
+  int[][] partB = { {0,185}, {0,540}, {519,540}, {208,359}, {188,218}, {0,185} }; 
+  sketchShape(partB, 200);
+  
+  int[][] partA = { {960,287}, {606,540}, {960,540}, {960,287} }; 
+  sketchShape(partA, 300);
+  // === */
+
+}
+
+void draw(){
+  background(#000000);
+  stroke(#ffffff);
+  println("---");
+  
+  drawScene();
   
   if (isRecording == true){
     saveFrame(getTimestamp()+".png");
