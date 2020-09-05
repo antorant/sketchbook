@@ -1,9 +1,9 @@
 int canvasWidth = 960;
-int canvasHeight = 540;
+int canvasHeight = 960;
 
 //
 boolean isRecording = false;
-String canvasTheme = "dark"; // light, dark
+String canvasTheme = "light"; // light, dark
 
 color canvasFG;
 color canvasBG;
@@ -93,6 +93,13 @@ void sketchShape(int[][] points, int density){
     if (p.ypoints[i] < yLow) { yLow = p.ypoints[i]; }
   }
   
+  int tolerance = 200;
+  
+  xHigh += tolerance;
+  xLow -= tolerance;
+  yHigh += tolerance;
+  yLow -= tolerance;
+  
   /*/ === debug: draw the bounding box
   stroke(#0000ff);
   noFill();
@@ -130,6 +137,10 @@ void sketchShape(int[][] points, int density){
     int x2 = randomInteger(xLow, xHigh);
     int y2 = randomInteger(yLow, yHigh);
     
+    // polarise!
+    ///y2 = y1; // horizontal
+    x2 = x1; // vertical
+    
     // check they're inside then draw line; if not reject and retry
     if (p.contains(x1, y1) == true && p.contains(x2, y2) == true){
       line(x1, y1, x2, y2);
@@ -159,18 +170,29 @@ void drawScene(){
   // === */
   
   
-  // mountains theme
+  /*/ mountains theme
   int[][] partD = { {0,150}, {72,152}, {126,149}, {207,176}, {260,161}, {293,176}, {329,149}, {402,168}, {439,149}, {519,167}, {568,185}, {501,185}, {327,256}, {288,305}, {260,387}, {210,363}, {189,218}, {0,185}, {0,150} }; 
-  sketchShape(partD, 50);
+  sketchShape(partD, 20);
   
   int[][] partC = { {960,149}, {960,287}, {606,540}, {519,540}, {259,388}, {287,303}, {325,256}, {501,185}, {589,185}, {639,207}, {743,159}, {844,156}, {960,149} }; 
-  sketchShape(partC, 100);
+  sketchShape(partC, 140);
   
   int[][] partB = { {0,185}, {0,540}, {519,540}, {208,359}, {188,218}, {0,185} }; 
-  sketchShape(partB, 200);
+  sketchShape(partB, 320);
   
   int[][] partA = { {960,287}, {606,540}, {960,540}, {960,287} }; 
-  sketchShape(partA, 300);
+  sketchShape(partA, 380);
+  // === */
+  
+  // cliffs
+  int[][] rocks = { {960,577}, {925,592}, {900,577}, {872,597}, {863,616}, {842,617}, {838,632}, {798,646}, {779,670}, {723,694}, {656,743}, {649,776}, {593,767}, {562,774}, {523,782}, {378,819}, {311,804}, {274,802}, {189,831}, {167,823}, {136,838}, {63,838}, {50,849}, {26,851}, {0,880}, {0,960}, {960,960}, {960,577} }; 
+  sketchShape(rocks, 500);
+  
+  int[][] sea = { {875,595}, {872,597}, {863,616}, {842,617}, {838,632}, {798,646}, {779,670}, {723,694}, {656,743}, {649,776}, {593,767}, {562,774}, {523,782}, {378,819}, {311,804}, {274,802}, {189,831}, {167,823}, {136,838}, {63,838}, {50,849}, {26,851}, {0,880}, {0,960}, {0,595}, {875,595} }; 
+  sketchShape(sea, 300);
+  
+  int[][] sky = { {0,595}, {875,595}, {903,577}, {925,595}, {960,577}, {960,0}, {480,0}, {553,30}, {537,51}, {551,82}, {502,102}, {554,123}, {542,164}, {574,193}, {500,255}, {512,284}, {541,298}, {531,353}, {362,435}, {296,451}, {365,402}, {335,374}, {437,337}, {367,322}, {403,307}, {337,282}, {364,261}, {247,210}, {287,185}, {217,153}, {288,128}, {207,123}, {233,96}, {177,80}, {133,0}, {0,0}, {0,595} }; 
+  sketchShape(sky, 100);
   // === */
 
 }
