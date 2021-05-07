@@ -2,7 +2,7 @@ int canvasWidth = 960;
 int canvasHeight = 960;
 
 //
-boolean isRecording = false;
+boolean isRecording = true;
 String canvasTheme = "light"; // light, dark
 
 color canvasFG;
@@ -15,6 +15,8 @@ void settings(){
 void setup(){
   //noLoop();
   frameRate(1);
+  
+  colorMode(HSB, 360, 100, 100, 100);
   
   if (canvasTheme == "light") {
     canvasFG = #000000;
@@ -31,7 +33,7 @@ void setup(){
   fill(#cccccc);
 }
 
-void sketchShape(int[][] points, int density, String orientation, int size){
+void sketchShape(int[][] points, int density, String orientation, int size, Boolean colour){
   
   // create the polygon object (p)
   java.awt.Polygon p = new java.awt.Polygon();
@@ -114,7 +116,7 @@ void sketchShape(int[][] points, int density, String orientation, int size){
   
   
   // draw background (no transparency)
-  //fill(#000000);
+  //fill(#ffffff);
   //noStroke();
   //beginShape();
   //for (int i = 0; i <= p.npoints; i++) {
@@ -127,7 +129,7 @@ void sketchShape(int[][] points, int density, String orientation, int size){
   //endShape();
   
   
-  stroke(canvasFG);
+  
   
   // draw a series of lines inside the shape
   int count = density;
@@ -155,6 +157,14 @@ void sketchShape(int[][] points, int density, String orientation, int size){
     if (orientation == "horizontal") { y2 = y1; }
     if (orientation == "vertical") { x2 = x1; }
     
+    // set colour
+    if (colour == true) {
+      int randomHue = randomInteger(0, 360);
+      stroke(randomHue, 100, 100, 100);
+    } else {
+      stroke(canvasFG);
+    }
+    
     // check they're inside then draw line; if not reject and retry
     if (p.contains(x1, y1) == true && p.contains(x2, y2) == true){
       line(x1, y1, x2, y2);
@@ -167,21 +177,31 @@ void sketchShape(int[][] points, int density, String orientation, int size){
 void drawScene(){
   // (points, density, orientation, size)
   
-  /*/ skethbook theme
+  // skethbook theme
   int[][] mountain = { {0,0}, {960, 0}, {960, 440}, {0, 440} }; 
-  sketchShape(mountain, 40, "none", 4);
+  sketchShape(mountain, 40, "none", 4, false);
+  sketchShape(mountain, 4, "none", 40, true);
 
   int[][] wallShape = { {0,440}, {960, 440}, {960, 640}, {0, 640} }; 
-  sketchShape(wallShape, 50, "vertical", 100);
+  sketchShape(wallShape, 50, "vertical", 100, false);
+  sketchShape(wallShape, 5, "vertical", 10, true);
   
   int[][] floorShape = { {0,640}, {960, 640}, {960, 960}, {0, 960} }; 
-  sketchShape(floorShape, 50, "horizontal", 400);
+  sketchShape(floorShape, 30, "horizontal", 400, false);
+  sketchShape(floorShape, 3, "horizontal", 200, true);
   
-  int[][] bodyShape = { {520,320}, {650, 260}, {780, 310}, {720, 960}, {620, 960} }; 
-  sketchShape(bodyShape, 100, "none", 100);
+  //int[][] bodyShape = { {520,320}, {650, 260}, {780, 310}, {720, 960}, {620, 960} }; 
+  //sketchShape(bodyShape, 100, "none", 100);
   
-  int[][] headShape = { {580,160}, {720, 140}, {680, 320}, {600, 300} }; 
-  sketchShape(headShape, 40, "none", 50);
+  //int[][] headShape = { {580,160}, {720, 140}, {680, 320}, {600, 300} }; 
+  //sketchShape(headShape, 40, "none", 50);
+  
+  int[][] mireiaShape = { {405,960},{404,960},{426,785},{424,755},{413,735},{385,705},{332,643},{351,578},{387,550},{423,518},{436,522},{447,507},{435,480},{455,464},{449,410},{464,397},{468,383},{462,375},{471,364},{503,352},{556,268},{587,251},{637,258},{662,255},{738,345},{752,426},{819,551},{840,600},{819,675},{838,721},{839,748},{837,783},{864,960},{848,856},{848,856},{864,960},{405,960},{404,957},{404,960},{405,960} }; 
+  sketchShape(mireiaShape, 200, "none", 100, false);
+  sketchShape(mireiaShape, 20, "none", 200, true);
+  
+  //int[][] canvasShape = { {0,640}, {960, 640}, {960, 960}, {0, 960} }; 
+  //sketchShape(canvasShape, 200, "none", 100, true);
   // === */
   
   
@@ -225,6 +245,17 @@ void drawScene(){
   
   int[][] sky = { {960, 569}, {889, 480}, {747, 514}, {716, 665}, {718, 788}, {767, 848}, {679, 885}, {652, 745}, {592, 802}, {576, 856}, {565, 783}, {567, 748}, {566, 721}, {547, 675}, {568, 600}, {547, 551}, {480, 426}, {466, 345}, {390, 255}, {365, 258}, {315, 251}, {284, 268}, {231, 352}, {199, 364}, {190, 375}, {196, 383}, {192, 397}, {177, 410}, {183, 464}, {163, 480}, {175, 507}, {164, 522}, {151, 518}, {115, 550}, {79, 578}, {60, 643}, {113, 705}, {141, 735}, {152, 755}, {154, 785}, {132, 957}, {114, 859}, {60, 871}, {0, 822}, {0, 0}, {960, 0}, {960, 569} }; 
   sketchShape(sky, 400, "none", 2);
+  // === */
+
+  /*/ balcony
+  int[][] buildings = { {960,960},{328,960},{328,637},{561,611},{766,641},{766,607},{809,565},{835,565},{847,583},{960,577},{960,960} }; 
+  sketchShape(buildings, 100, "vertical", 200);
+  
+  int[][] wall = { {328,324},{328,960},{0,960},{0,0},{960,0},{960,182},{480,366},{328,324} }; 
+  sketchShape(wall, 300, "horizontal", 60);
+  
+  int[][] sky = { {960,181},{480,366},{328,324},{328,637},{562,611},{766,641},{766,607},{809,565},{835,565},{847,583},{960,577},{960,181} }; 
+  sketchShape(sky, 200, "none", 4);
   // === */
 
 }
