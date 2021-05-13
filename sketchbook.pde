@@ -1,9 +1,13 @@
 int canvasWidth = 960;
 int canvasHeight = 960;
 
-//
-boolean isRecording = true;
-String canvasTheme = "light"; // light, dark
+// save each frame (make an animation)
+boolean isRecording = false;
+
+// debug tools
+boolean debugDrawBoundingBox = false;
+boolean debugDrawPolygonOutline = false;
+boolean debugDrawPolygonCenter = false;
 
 color canvasFG;
 color canvasBG;
@@ -18,22 +22,14 @@ void setup(){
   
   colorMode(HSB, 360, 100, 100, 100);
   
-  if (canvasTheme == "light") {
-    canvasFG = #000000;
-    canvasBG = #ffffff;
-  }
-  
-  if (canvasTheme == "dark") {
-    canvasFG = #ffffff;
-    canvasBG = #000000;
-  }
+  canvasFG = #222222;
+  canvasBG = #eeeeee;
   
   stroke(canvasFG);
   background(canvasBG);
-  fill(#cccccc);
 }
 
-void sketchShape(int[][] points, int density, String orientation, int size, Boolean colour){
+void sketchShape(int[][] points, int density, String orientation, int size, int weightHigh, int colour){
   
   // create the polygon object (p)
   java.awt.Polygon p = new java.awt.Polygon();
@@ -43,34 +39,37 @@ void sketchShape(int[][] points, int density, String orientation, int size, Bool
     p.addPoint(points[i][0], points[i][1]);
   }
 
-  /*/ === debug: draw the polygon outline
-  noFill();
-  stroke(#ff0000);
-  beginShape();
-  for (int i = 0; i <= p.npoints; i++) {
-    if (i == p.npoints) {
-      vertex(p.xpoints[0], p.ypoints[0]); // close shape if last point
-    } else {
-     vertex(p.xpoints[i], p.ypoints[i]);
+  // === debug: draw the polygon outline
+  if (debugDrawPolygonOutline == true) {
+    noFill();
+    stroke(#ff0000);
+    strokeWeight(1);
+    beginShape();
+    for (int i = 0; i <= p.npoints; i++) {
+      if (i == p.npoints) {
+        vertex(p.xpoints[0], p.ypoints[0]); // close shape if last point
+      } else {
+       vertex(p.xpoints[i], p.ypoints[i]);
+      }
     }
+    endShape();
   }
-  endShape();
-  // === debug: draw the polygon outline */
   
+  // === debug: draw polygon center point
+  if (debugDrawPolygonCenter == true) {
+    int xTotal = 0;
+    int yTotal = 0;
+    
+    // first sum up all X coordinates, all Y coordinates
+    for (int i = 0; i < p.npoints; i++) {   
+      xTotal += p.xpoints[i];
+      yTotal += p.ypoints[i];
+    }
+    
+    int polygonCenterX = xTotal / p.npoints;
+    int polygonCenterY = yTotal / p.npoints;
+  }
 
-  /*/ === debug: get polygon center point
-  int xTotal = 0;
-  int yTotal = 0;
-  
-  // first sum up all X coordinates, all Y coordinates
-  for (int i = 0; i < p.npoints; i++) {   
-    xTotal += p.xpoints[i];
-    yTotal += p.ypoints[i];
-  }
-  
-  int polygonCenterX = xTotal / p.npoints;
-  int polygonCenterY = yTotal / p.npoints;
-  // === end debug: get polygon center point */
   
   
   // vars: range variables to calculate bounding box
@@ -95,6 +94,7 @@ void sketchShape(int[][] points, int density, String orientation, int size, Bool
     if (p.ypoints[i] < yLow) { yLow = p.ypoints[i]; }
   }
   
+  
   int tolerance = 200;
   
   xHigh += tolerance;
@@ -102,17 +102,12 @@ void sketchShape(int[][] points, int density, String orientation, int size, Bool
   yHigh += tolerance;
   yLow -= tolerance;
   
-  /*/ === debug: draw the bounding box
-  stroke(#0000ff);
-  noFill();
-  rect(xLow, yLow, xHigh - xLow, yHigh - yLow);
-  // === */
-  
-  /*/ === debug: draw a cross to mark center
-  stroke(#0000ff);
-  line(polygonCenterX - 4, polygonCenterY, polygonCenterX + 4, polygonCenterY);
-  line(polygonCenterX, polygonCenterY - 4, polygonCenterX, polygonCenterY + 4);
-  // === */
+  // === debug: draw the bounding box
+  if (debugDrawBoundingBox == true) {
+    stroke(#0000ff);
+    noFill();
+    rect(xLow, yLow, xHigh - xLow, yHigh - yLow);
+  }
   
   
   // draw background (no transparency)
@@ -146,10 +141,10 @@ void sketchShape(int[][] points, int density, String orientation, int size, Bool
     y2 = randomInteger(y1 - size, y1 + size);
     
     // set a random weight
-    int wLow = 1;
-    int wHigh = 20;
+    int weightLow = 1;
+    //int wHigh = 100;
     
-    int weight = randomInteger(wLow, wHigh);
+    int weight = randomInteger(weightLow, weightHigh);
     strokeWeight(weight);
     strokeCap(SQUARE);
     
@@ -158,12 +153,16 @@ void sketchShape(int[][] points, int density, String orientation, int size, Bool
     if (orientation == "vertical") { x2 = x1; }
     
     // set colour
-    if (colour == true) {
+    int colourOnOff = randomInteger(0, 100);
+
+    if (colourOnOff <= colour){
       int randomHue = randomInteger(0, 360);
-      stroke(randomHue, 100, 100, 100);
+      stroke(randomHue, 40, 100, 100);
     } else {
       stroke(canvasFG);
     }
+    
+    
     
     // check they're inside then draw line; if not reject and retry
     if (p.contains(x1, y1) == true && p.contains(x2, y2) == true){
@@ -175,33 +174,23 @@ void sketchShape(int[][] points, int density, String orientation, int size, Bool
 }
 
 void drawScene(){
-  // (points, density, orientation, size)
+  // (points, density, orientation, size, weight, colour)
   
   // skethbook theme
   int[][] mountain = { {0,0}, {960, 0}, {960, 440}, {0, 440} }; 
-  sketchShape(mountain, 40, "none", 4, false);
-  sketchShape(mountain, 4, "none", 40, true);
+  sketchShape(mountain, 80, "none", 20, 10, 50);
 
   int[][] wallShape = { {0,440}, {960, 440}, {960, 640}, {0, 640} }; 
-  sketchShape(wallShape, 50, "vertical", 100, false);
-  sketchShape(wallShape, 5, "vertical", 10, true);
+  sketchShape(wallShape, 20, "vertical", 200, 100, 20);
   
   int[][] floorShape = { {0,640}, {960, 640}, {960, 960}, {0, 960} }; 
-  sketchShape(floorShape, 30, "horizontal", 400, false);
-  sketchShape(floorShape, 3, "horizontal", 200, true);
+  sketchShape(floorShape, 40, "horizontal", 400, 20, 20);
   
-  //int[][] bodyShape = { {520,320}, {650, 260}, {780, 310}, {720, 960}, {620, 960} }; 
-  //sketchShape(bodyShape, 100, "none", 100);
+  int[][] bodyShape = { {520,320}, {650, 260}, {780, 310}, {720, 960}, {620, 960} }; 
+  sketchShape(bodyShape, 40, "none", 50, 100, 40);
   
-  //int[][] headShape = { {580,160}, {720, 140}, {680, 320}, {600, 300} }; 
-  //sketchShape(headShape, 40, "none", 50);
-  
-  int[][] mireiaShape = { {405,960},{404,960},{426,785},{424,755},{413,735},{385,705},{332,643},{351,578},{387,550},{423,518},{436,522},{447,507},{435,480},{455,464},{449,410},{464,397},{468,383},{462,375},{471,364},{503,352},{556,268},{587,251},{637,258},{662,255},{738,345},{752,426},{819,551},{840,600},{819,675},{838,721},{839,748},{837,783},{864,960},{848,856},{848,856},{864,960},{405,960},{404,957},{404,960},{405,960} }; 
-  sketchShape(mireiaShape, 200, "none", 100, false);
-  sketchShape(mireiaShape, 20, "none", 200, true);
-  
-  //int[][] canvasShape = { {0,640}, {960, 640}, {960, 960}, {0, 960} }; 
-  //sketchShape(canvasShape, 200, "none", 100, true);
+  int[][] headShape = { {580,160}, {720, 140}, {680, 320}, {600, 300} }; 
+  sketchShape(headShape, 20, "none", 50, 100, 40);
   // === */
   
   
@@ -267,7 +256,7 @@ void draw(){
   drawScene();
   
   if (isRecording == true){
-    saveFrame(getTimestamp()+".png");
+    saveFrame("_render/"+getTimestamp()+".png");
   }
 }
 
