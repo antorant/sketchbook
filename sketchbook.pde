@@ -1,5 +1,6 @@
-int canvasWidth = 960;
-int canvasHeight = 960;
+int canvasWidth = 800;
+int canvasHeight = 800;
+int scale = 3; // for hi-res images
 
 // save each frame (make an animation)
 boolean isRecording = false;
@@ -13,12 +14,13 @@ color canvasFG;
 color canvasBG;
 
 void settings(){
-  size(canvasWidth, canvasHeight);
+  size(canvasWidth*scale, canvasHeight*scale);
 }
 
 void setup(){
-  //noLoop();
-  frameRate(1);
+  // render one image (space bar refresh), or a continuous series
+  noLoop();
+  frameRate(1); // of continuous
   
   colorMode(HSB, 360, 100, 100, 100);
   
@@ -128,6 +130,7 @@ void sketchShape(int[][] points, int density, String orientation, int size, int 
   
   // draw a series of lines inside the shape
   int count = density;
+  size *= scale;
   for (int i = 0; i < count; i++) {
     // create a random x,y pair inside the bounding box
    
@@ -145,6 +148,7 @@ void sketchShape(int[][] points, int density, String orientation, int size, int 
     //int wHigh = 100;
     
     int weight = randomInteger(weightLow, weightHigh);
+    weight *= scale;
     strokeWeight(weight);
     strokeCap(SQUARE);
     
@@ -173,23 +177,36 @@ void sketchShape(int[][] points, int density, String orientation, int size, int 
   }
 }
 
+// modify shape coordinates according to scale variable (for hi-res images)
+void scaleShape(int[][] points){
+  for (int i = 0; i < points.length; i++) {
+    points[i][0] *= scale;
+    points[i][1] *= scale;
+  }
+}
+
 void drawScene(){
   // (points, density, orientation, size, weight, colour)
   
   // skethbook theme
-  int[][] mountain = { {0,0}, {960, 0}, {960, 440}, {0, 440} }; 
-  sketchShape(mountain, 80, "none", 20, 10, 50);
+  int[][] skyShape = { {0,0}, {800, 0}, {800, 440}, {0, 440} }; 
+  scaleShape(skyShape);
+  sketchShape(skyShape, 80, "none", 20, 10, 50);
 
-  int[][] wallShape = { {0,440}, {960, 440}, {960, 640}, {0, 640} }; 
+  int[][] wallShape = { {0,440}, {800, 440}, {800, 640}, {0, 640} }; 
+  scaleShape(wallShape);
   sketchShape(wallShape, 20, "vertical", 200, 100, 20);
   
-  int[][] floorShape = { {0,640}, {960, 640}, {960, 960}, {0, 960} }; 
+  int[][] floorShape = { {0,640}, {800, 640}, {800, 800}, {0, 800} };
+  scaleShape(floorShape);
   sketchShape(floorShape, 40, "horizontal", 400, 20, 20);
   
-  int[][] bodyShape = { {520,320}, {650, 260}, {780, 310}, {720, 960}, {620, 960} }; 
+  int[][] bodyShape = { {420,320}, {540, 260}, {680, 310}, {620, 800}, {520, 800} }; 
+  scaleShape(bodyShape);
   sketchShape(bodyShape, 40, "none", 50, 100, 40);
   
-  int[][] headShape = { {580,160}, {720, 140}, {680, 320}, {600, 300} }; 
+  int[][] headShape = { {480,160}, {620, 140}, {580, 320}, {500, 300} }; 
+  scaleShape(headShape);
   sketchShape(headShape, 20, "none", 50, 100, 40);
   // === */
   
@@ -271,7 +288,7 @@ void keyPressed() {
   
   // P : export image
   if (keyCode == 80) {    
-    saveFrame(getTimestamp()+".png");
+    saveFrame("_render/"+getTimestamp()+".png");
   }
   
   // Q : record (output images)

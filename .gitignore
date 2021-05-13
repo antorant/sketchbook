@@ -24,9 +24,6 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Sass
-.sass-cache/
-*.css.map
-
 # Source files
+_render
 _source
