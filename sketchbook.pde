@@ -13,6 +13,8 @@ boolean debugDrawPolygonCenter = false;
 color canvasFG;
 color canvasBG;
 
+int saturation;
+
 void settings(){
   size(canvasWidth*scale, canvasHeight*scale);
 }
@@ -25,6 +27,7 @@ void setup(){
   colorMode(HSB, 360, 100, 100, 100);
   
   canvasFG = #222222; canvasBG = #ffffff;
+  saturation = 40;
   
   stroke(canvasFG);
   background(canvasBG);
@@ -160,7 +163,7 @@ void sketchShape(int[][] points, int density, String orientation, int size, int 
 
     if (colourOnOff <= colour){
       int randomHue = randomInteger(0, 360);
-      stroke(randomHue, 40, 100, 100);
+      stroke(randomHue, saturation, 100, 100);
     } else {
       stroke(canvasFG);
     }
