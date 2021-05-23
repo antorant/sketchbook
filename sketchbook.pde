@@ -26,7 +26,7 @@ void setup(){
   
   colorMode(HSB, 360, 100, 100, 100);
   
-  canvasFG = #222222; canvasBG = #ffffff;
+  canvasFG = #222222; canvasBG = #666666;
   saturation = 40;
   
   stroke(canvasFG);
@@ -193,7 +193,7 @@ void drawScene(){
   // skethbook theme
   int[][] skyShape = { {0,0}, {800, 0}, {800, 440}, {0, 440} }; 
   scaleShape(skyShape);
-  sketchShape(skyShape, 40, "none", 20, 10, 70);
+  sketchShape(skyShape, 30, "none", 20, 10, 40);
 
   int[][] wallShape = { {0,440}, {800, 440}, {800, 640}, {0, 640} }; 
   scaleShape(wallShape);
@@ -201,15 +201,15 @@ void drawScene(){
   
   int[][] floorShape = { {0,640}, {800, 640}, {800, 800}, {0, 800} };
   scaleShape(floorShape);
-  sketchShape(floorShape, 20, "horizontal", 400, 20, 20);
+  sketchShape(floorShape, 10, "horizontal", 400, 20, 20);
   
   int[][] bodyShape = { {420,320}, {540, 260}, {680, 310}, {620, 800}, {520, 800} }; 
   scaleShape(bodyShape);
-  sketchShape(bodyShape, 40, "none", 50, 100, 40);
+  sketchShape(bodyShape, 20, "none", 50, 100, 40);
   
   int[][] headShape = { {480,160}, {620, 140}, {580, 320}, {500, 300} }; 
   scaleShape(headShape);
-  sketchShape(headShape, 20, "none", 50, 100, 40);
+  sketchShape(headShape, 10, "none", 50, 100, 40);
   // === */
 
 }
