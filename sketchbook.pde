@@ -3,7 +3,7 @@ int canvasHeight = 800;
 int scale = 1; // for hi-res images
 
 // save each frame (make an animation)
-boolean isRecording = false;
+boolean isRecording = true;
 
 // debug tools
 boolean debugDrawBoundingBox = false;
@@ -21,7 +21,7 @@ void settings(){
 
 void setup(){
   // render one image (space bar refresh), or a continuous series
-  noLoop();
+  // noLoop();
   frameRate(1); // of continuous
   
   colorMode(HSB, 360, 100, 100, 100);
