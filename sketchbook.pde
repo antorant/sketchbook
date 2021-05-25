@@ -21,7 +21,11 @@ void settings(){
 
 void setup(){
   // render one image (space bar refresh), or a continuous series
-  noLoop();
+  
+  if (isRecording != true){
+    noLoop();
+  }
+  
   frameRate(1); // of continuous
   
   colorMode(HSB, 360, 100, 100, 100);
@@ -193,15 +197,15 @@ void drawScene(){
   // skethbook theme
   int[][] skyShape = { {0,0}, {800, 0}, {800, 440}, {0, 440} }; 
   scaleShape(skyShape);
-  sketchShape(skyShape, 30, "none", 20, 10, 40);
+  sketchShape(skyShape, 40, "none", 20, 10, 60);
 
   int[][] wallShape = { {0,440}, {800, 440}, {800, 640}, {0, 640} }; 
   scaleShape(wallShape);
-  sketchShape(wallShape, 20, "vertical", 200, 100, 20);
+  sketchShape(wallShape, 20, "vertical", 200, 100, 30);
   
   int[][] floorShape = { {0,640}, {800, 640}, {800, 800}, {0, 800} };
   scaleShape(floorShape);
-  sketchShape(floorShape, 10, "horizontal", 400, 20, 20);
+  sketchShape(floorShape, 10, "horizontal", 400, 20, 30);
   
   int[][] bodyShape = { {420,320}, {540, 260}, {680, 310}, {620, 800}, {520, 800} }; 
   scaleShape(bodyShape);
@@ -291,6 +295,6 @@ String getTimestamp(){
   String mm = nf(minute(), 2);
   String s = nf(second(), 2);
   
-  String timestamp = y+m+d+h+mm+s;
+  String timestamp = y+m+d+"-"+h+mm+s;
   return timestamp;
 }
