@@ -1,9 +1,8 @@
+int scale = 1; // for hi-res images
+boolean isRecording = false; // save each frame (make an animation)
+
 int canvasWidth = 800;
 int canvasHeight = 800;
-int scale = 1; // for hi-res images
-
-// save each frame (make an animation)
-boolean isRecording = false;
 
 // debug tools
 boolean debugDrawBoundingBox = false;
