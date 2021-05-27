@@ -150,7 +150,7 @@ void sketchShape(int[][] points, int density, String orientation, int size, int 
     y2 = randomInteger(y1 - size, y1 + size);
     
     // set a random weight
-    int weightLow = 1;
+    int weightLow = 4;
     //int wHigh = 100;
     
     int weight = randomInteger(weightLow, weightHigh);
@@ -201,19 +201,19 @@ void drawScene(){
 
   int[][] wallShape = { {0,440}, {800, 440}, {800, 640}, {0, 640} }; 
   scaleShape(wallShape);
-  sketchShape(wallShape, 20, "vertical", 200, 100, 30);
+  sketchShape(wallShape, 16, "vertical", 160, 80, 30);
   
   int[][] floorShape = { {0,640}, {800, 640}, {800, 800}, {0, 800} };
   scaleShape(floorShape);
   sketchShape(floorShape, 10, "horizontal", 400, 20, 30);
   
-  int[][] bodyShape = { {420,320}, {540, 260}, {680, 310}, {620, 800}, {520, 800} }; 
+  int[][] bodyShape = { {360,320}, {520, 260}, {660, 310}, {600, 800}, {460, 800} }; 
   scaleShape(bodyShape);
-  sketchShape(bodyShape, 20, "none", 50, 100, 40);
+  sketchShape(bodyShape, 20, "none", 80, 80, 50);
   
-  int[][] headShape = { {480,160}, {620, 140}, {580, 320}, {500, 300} }; 
+  int[][] headShape = { {420,120}, {600, 100}, {560, 320}, {460, 300} }; 
   scaleShape(headShape);
-  sketchShape(headShape, 10, "none", 50, 100, 40);
+  sketchShape(headShape, 10, "none", 80, 80, 50);
   // === */
 
 }
